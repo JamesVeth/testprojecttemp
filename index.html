@@ -3,59 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Append Example</title>
-</head>
+    <title>Pop-up Test</title>
+</head> 
 <body>
-    <h3>Testing Input/Output and File Writing</h3>
-    <p>GitHub Test.</p>
-    <label for="message">Enter Text To Append:</label>
-    <br>
-    <textarea id="message" name="txt_message" rows="4" cols="50"></textarea>
-    <br>
-    <button type="button" onclick="submitText()">Submit</button>
-    <h4>The last 10 appended words stored in the Supabase text storage are:</h4>
-    <div id="wordList"></div>
+    <h3>Click the button to see a pop-up message</h3>
+    <button type="button" onclick="showPopup()">Show Pop-up</button>
 
     <script>
-        // Your JavaScript code goes here
-        const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-        async function submitText() {
+        function showPopup() {
             alert("This is a test pop-up message!");
-        }
-         async function noneUsed(){
-            
-            const message = document.getElementById('message').value;
-            const { data, error } = await supabase
-                .from('text_entries')
-                .insert([{ content: message }]);
-
-            if (error) {
-                console.error('Error inserting data:', error);
-            } else {
-                console.log('Data inserted:', data);
-                const { data: entries, error: fetchError } = await supabase
-                    .from('text_entries')
-                    .select('*')
-                    .order('id', { ascending: false })
-                    .limit(10);
-
-                if (fetchError) {
-                    console.error('Error fetching data:', fetchError);
-                } else {
-                    document.getElementById('wordList').innerText = entries.map(entry => entry.content).join(' ');
-                }
-            }
         }
     </script>
 </body>
 </html>
-
-
-
-<!-- 
-    const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co'; // Replace with your Supabase URL
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ'; // Replace with your Supabase Key
--->
