@@ -4,39 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Append Example</title>
-    <!-- Include Supabase client library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
-    <script>
-    // Initialize Supabase client
-    const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co'; // Replace with your Supabase URL
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ'; // Replace with your Supabase Key
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-    async function submitText() {
-        const message = document.getElementById('message').value;
-        const { data, error } = await supabase
-            .from('text_entries')
-            .insert([{ content: message }]);
-
-        if (error) {
-            console.error('Error inserting data:', error);
-        } else {
-            console.log('Data inserted:', data);
-            // Fetch and display the last 10 entries
-            const { data: entries, error: fetchError } = await supabase
-                .from('text_entries')
-                .select('*')
-                .order('id', { ascending: false })
-                .limit(10);
-
-            if (fetchError) {
-                console.error('Error fetching data:', fetchError);
-            } else {
-                document.getElementById('wordList').innerText = entries.map(entry => entry.content).join(' ');
-            }
-        }
-    }
-    </script>
 </head>
 <body>
     <h3>Testing Input/Output and File Writing</h3>
@@ -48,5 +15,43 @@
     <button type="button" onclick="submitText()">Submit</button>
     <h4>The last 10 appended words stored in the Supabase text storage are:</h4>
     <div id="wordList"></div>
+
+    <script>
+        // Your JavaScript code goes here
+        const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function submitText() {
+            const message = document.getElementById('message').value;
+            const { data, error } = await supabase
+                .from('text_entries')
+                .insert([{ content: message }]);
+
+            if (error) {
+                console.error('Error inserting data:', error);
+            } else {
+                console.log('Data inserted:', data);
+                const { data: entries, error: fetchError } = await supabase
+                    .from('text_entries')
+                    .select('*')
+                    .order('id', { ascending: false })
+                    .limit(10);
+
+                if (fetchError) {
+                    console.error('Error fetching data:', fetchError);
+                } else {
+                    document.getElementById('wordList').innerText = entries.map(entry => entry.content).join(' ');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
+
+
+
+<!-- 
+    const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co'; // Replace with your Supabase URL
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ'; // Replace with your Supabase Key
+-->
