@@ -23,6 +23,10 @@
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         async function submitText() {
+            alert("This is a test pop-up message!");
+        }
+         async function noneUsed(){
+            
             const message = document.getElementById('message').value;
             const { data, error } = await supabase
                 .from('text_entries')
