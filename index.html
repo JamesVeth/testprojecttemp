@@ -3,60 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Append Example</title>
+    <title>Simple Supabase Example</title>
     <!-- Include Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
 </head>
 <body>
-    <h3>Testing Input/Output and File Writing</h3>
-    <p>GitHub Test.</p>
-    <label for="message">Enter Text To Append:</label>
+    <h3>Submit Text to Supabase</h3>
+    <label for="message">Enter Text:</label>
     <br>
     <textarea id="message" name="txt_message" rows="4" cols="50"></textarea>
     <br>
     <button type="button" onclick="submitText()">Submit</button>
-    <h4>The last 10 appended words stored in the Supabase text storage are:</h4>
-    <div id="wordList"></div>
 
     <script>
         // Initialize Supabase client
-        const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ';
+        const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co'; // Replace with your Supabase URL
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase Key
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Function to submit text to Supabase
         async function submitText() {
-            try {
-                const message = document.getElementById('message').value;
+            const message = document.getElementById('message').value;
 
-                // Insert the text into the Supabase table
-                const { data, error } = await supabase
-                    .from('text_entries')
-                    .insert([{ content: message }]);
+            // Insert the text into the Supabase table
+            const { data, error } = await supabase
+                .from('text_entries') // Replace with your table name
+                .insert([{ content: message }]);
 
-                if (error) {
-                    console.error('Error inserting data:', error);
-                    alert('Failed to insert text. Please try again.');
-                } else {
-                    console.log('Data inserted:', data);
-                    alert('Text inserted successfully!');
-
-                    // Fetch and display the last 10 entries
-                    const { data: entries, error: fetchError } = await supabase
-                        .from('text_entries')
-                        .select('*')
-                        .order('id', { ascending: false })
-                        .limit(10);
-
-                    if (fetchError) {
-                        console.error('Error fetching data:', fetchError);
-                    } else {
-                        document.getElementById('wordList').innerText = entries.map(entry => entry.content).join(' ');
-                    }
-                }
-            } catch (error) {
-                console.error('Unexpected error:', error);
-                alert('An unexpected error occurred. Please try again.');
+            if (error) {
+                console.error('Error inserting data:', error);
+                alert('Failed to insert text. Please try again.');
+            } else {
+                alert('Text inserted successfully!');
             }
         }
     </script>
