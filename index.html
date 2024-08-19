@@ -17,26 +17,28 @@
 
     <script>
         // Initialize Supabase client
-        const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co'; // Replace with your Supabase URL
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase Key
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        document.addEventListener('DOMContentLoaded', function() {
+            const supabaseUrl = 'https://iwxqhjpfswrxmqsofngw.supabase.co'; // Replace with your Supabase URL
+            const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase Key
+            const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Function to submit text to Supabase
-        async function submitText() {
-            const message = document.getElementById('message').value;
+            // Function to submit text to Supabase
+            window.submitText = async function() {
+                const message = document.getElementById('message').value;
 
-            // Insert the text into the Supabase table
-            const { data, error } = await supabase
-                .from('text_entries') // Replace with your table name
-                .insert([{ content: message }]);
+                // Insert the text into the Supabase table
+                const { data, error } = await supabase
+                    .from('text_entries') // Replace with your table name
+                    .insert([{ content: message }]);
 
-            if (error) {
-                console.error('Error inserting data:', error);
-                alert('Failed to insert text. Please try again.');
-            } else {
-                alert('Text inserted successfully!');
+                if (error) {
+                    console.error('Error inserting data:', error);
+                    alert('Failed to insert text. Please try again.');
+                } else {
+                    alert('Text inserted successfully!');
+                }
             }
-        }
+        });
     </script>
 </body>
 </html>
