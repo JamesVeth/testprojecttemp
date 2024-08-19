@@ -23,7 +23,7 @@
  
 
     const insertData = async (data) => {
-      const { data: insertedData, error } = await fetch(`${supabaseUrl}/rest/v1/text_entries`, {
+      const { data: insertedData, error } = await fetch(`${supabaseUrl}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
