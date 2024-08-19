@@ -26,32 +26,37 @@
 
         // Function to submit text to Supabase
         async function submitText() {
-            const message = document.getElementById('message').value;
+            try {
+                const message = document.getElementById('message').value;
 
-            // Insert the text into the Supabase table
-            const { data, error } = await supabase
-                .from('text_entries')
-                .insert([{ content: message }]);
-
-            if (error) {
-                console.error('Error inserting data:', error);
-                alert('Failed to insert text. Please try again.');
-            } else {
-                console.log('Data inserted:', data);
-                alert('Text inserted successfully!');
-
-                // Fetch and display the last 10 entries
-                const { data: entries, error: fetchError } = await supabase
+                // Insert the text into the Supabase table
+                const { data, error } = await supabase
                     .from('text_entries')
-                    .select('*')
-                    .order('id', { ascending: false })
-                    .limit(10);
+                    .insert([{ content: message }]);
 
-                if (fetchError) {
-                    console.error('Error fetching data:', fetchError);
+                if (error) {
+                    console.error('Error inserting data:', error);
+                    alert('Failed to insert text. Please try again.');
                 } else {
-                    document.getElementById('wordList').innerText = entries.map(entry => entry.content).join(' ');
+                    console.log('Data inserted:', data);
+                    alert('Text inserted successfully!');
+
+                    // Fetch and display the last 10 entries
+                    const { data: entries, error: fetchError } = await supabase
+                        .from('text_entries')
+                        .select('*')
+                        .order('id', { ascending: false })
+                        .limit(10);
+
+                    if (fetchError) {
+                        console.error('Error fetching data:', fetchError);
+                    } else {
+                        document.getElementById('wordList').innerText = entries.map(entry => entry.content).join(' ');
+                    }
                 }
+            } catch (error) {
+                console.error('Unexpected error:', error);
+                alert('An unexpected error occurred. Please try again.');
             }
         }
     </script>
