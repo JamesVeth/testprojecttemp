@@ -41,12 +41,16 @@
 
     const submitText = () => {
         const message = document.getElementById('message').value;
+
+        console.log('Message:', message);
+
         if (message) {
             insertData({ message });
         } else {
             console.error('Message is empty');
         }
     };
+    
   </script>
 </body>
 </html>
