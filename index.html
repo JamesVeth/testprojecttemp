@@ -3,7 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submit Text to Supabase</title>
+  <title>Submit Text and Display Data</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
   <h3>Submit Text to Supabase</h3>
@@ -13,15 +27,26 @@
   <br>
   <button type="button" onclick="submitText()">Submit</button>
 
+  <h3>Data from Supabase</h3>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Content</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data rows will be inserted here -->
+    </tbody>
+  </table>
+
   <script>
+    // Supabase API URL
+    const url = 'https://iwxqhjpfswrxmqsofngw.supabase.co/rest/v1/text_entries';
+    const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ';
+
     function submitText() {
       const message = document.getElementById('message').value;
-
-      // Supabase API URL
-      const url = 'https://iwxqhjpfswrxmqsofngw.supabase.co/rest/v1/text_entries';
-
-      // Supabase API key
-      const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eHFoanBmc3dyeG1xc29mbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjM1Njk4OTAsImV4cCI6MjAzOTE0NTg5MH0.IODZViGp6gp1NEDvJvXCljJnEifUvfCw5tJf41AB7EQ';
 
       // Create the data object to send
       const data = {
@@ -41,16 +66,18 @@
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        // Check if there is a response body to parse
-        return response.text(); // Use text() instead of json() to handle empty responses
+        return response.text(); // Use text() to handle empty responses
       })
       .then(responseText => {
-        // If there's a response, parse it
         if (responseText) {
           const responseData = JSON.parse(responseText);
           alert('Success: ' + JSON.stringify(responseData));
+          // Fetch and display the updated data after submission
+          fetchData();
         } else {
           alert('Success: No content returned');
+          // Fetch and display the updated data after submission
+          fetchData();
         }
       })
       .catch((error) => {
@@ -58,6 +85,49 @@
         alert('Error: ' + error.message);
       });
     }
+
+    function fetchData() {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'apikey': apiKey,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Display all rows of the table
+        displayData(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+    }
+
+    function displayData(data) {
+      const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+      tableBody.innerHTML = ''; // Clear existing data
+
+      if (data.length > 0) {
+        data.forEach(entry => {
+          const row = tableBody.insertRow();
+          const cellId = row.insertCell(0);
+          const cellContent = row.insertCell(1);
+
+          cellId.textContent = entry.id;
+          cellContent.textContent = entry.content;
+        });
+      } else {
+        // If there's no data, display a message
+        const row = tableBody.insertRow();
+        const cell = row.insertCell(0);
+        cell.colSpan = 2;
+        cell.textContent = 'No data available';
+      }
+    }
+
+    // Fetch data on page load
+    document.addEventListener('DOMContentLoaded', fetchData);
   </script>
 </body>
 </html>
